@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Codebase
-      uses: actions/checkout@latest
+      uses: actions/checkout@v2.3.4
 
     - name: Cache Compiler Installations
-      uses: actions/cache@latest
+      uses: actions/cache@v2.1.4
       with:
         path: |
           ~/.solcx
@@ -21,7 +21,7 @@ jobs:
         key: compiler-cache
 
     - name: Setup Node.js
-      uses: actions/setup-node@latest
+      uses: actions/setup-node@v2.1.5
       with:
         node-version: '14'
 
