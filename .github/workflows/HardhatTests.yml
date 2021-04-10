@@ -1,0 +1,32 @@
+name: Run Hardhat Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Codebase
+      uses: actions/checkout@latest
+
+    - name: Cache Compiler Installations
+      uses: actions/cache@latest
+      with:
+        path: |
+          ~/.solcx
+          ~/.vvm
+        key: compiler-cache
+
+    - name: Setup Node.js
+      uses: actions/setup-node@latest
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm i
+
+    - name: Run Hardhat Tests
+      run: npm run test
