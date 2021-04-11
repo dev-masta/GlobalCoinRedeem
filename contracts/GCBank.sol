@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 interface IERC20 {
     function balanceOf(address account) external view returns (uint256);
@@ -38,7 +39,7 @@ contract GCBankMeta {
     }
 }
 
-contract GCBank is Ownable, GCBankMeta {
+contract GCBank is Ownable, Pausable, GCBankMeta {
 
     address GcrAddress;
 
@@ -47,33 +48,39 @@ contract GCBank is Ownable, GCBankMeta {
 
     constructor(address _tokenAddress, uint256 _chainId) GCBankMeta(_chainId) {
         GcrAddress = _tokenAddress;
+        // addPauser(msg.sender);
+    }
+
+    function pauseContract() public onlyOwner {
+        _pause();
+    }
+
+    function withdrawFunds(uint256 _amount) public onlyOwner {
+        IERC20 GCR = IERC20(GcrAddress);
+        GCR.transfer(owner(), _amount);
     }
 
     function withdrawPoints (
         uint256 _amount, address _receiverAddress, bytes32 r, bytes32 s, uint8 v
-    ) public {
+    ) public  whenNotPaused {
 
         IERC20 GCR = IERC20(GcrAddress);
         address contractOwner = owner();
+        uint256 previousNonce = nonces[contractOwner];
 
         require(GCR.balanceOf(address(this)) >= _amount, "Contract doesn't have enough GCR");
-
-        MetaTransaction memory metaTx = MetaTransaction({
-            nonce: nonces[contractOwner],
-            from: contractOwner
-        });
 
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
                 DOMAIN_SEPARATOR,
-                keccak256(abi.encode(META_TRANSACTION_TYPEHASH, metaTx.nonce, metaTx.from))
+                keccak256(abi.encode(META_TRANSACTION_TYPEHASH, previousNonce, contractOwner))
             )
         );
 
         require(contractOwner == ecrecover(digest, v, r, s), "GCBank:invalid-signature");
 
-        nonces[contractOwner] += 1;
+        nonces[contractOwner] = previousNonce + 1;
 
         GCR.transfer(_receiverAddress, _amount);
 

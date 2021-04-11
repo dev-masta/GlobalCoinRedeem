@@ -65,7 +65,7 @@ module.exports = {
   },
   gasReporter: {
     currency: 'USD',
-    gasPrice: 1,
+    gasPrice: 100,
     coinmarketcap: process.env.CMC_APIKEY
   },
   abiExporter: {

@@ -85,6 +85,124 @@ describe("GCBank", accounts => {
             expect(await GCBank.nonces(owner.address)).to.equal('1');
         });
 
+        it("External account should fail to Distribute $GCR", async function () {
+
+            expect(await UChildERC20.balanceOf(alice.address)).to.equal('0');
+            const userNonce = await GCBank.nonces(alice.address);
+            expect(userNonce).to.equal('0');
+
+            const transferAmount = "250000";
+
+            const typedMessage = {
+                domain:{
+                    name: "GCBank",
+                    version: "1",
+                    chainId : hre.network.config.chainId,
+                    verifyingContract: GCBank.address
+                },
+                primaryType: "MetaTransaction",
+                types: {
+                    EIP712Domain: [
+                        { name: "name", type: "string" },
+                        { name: "version", type: "string" },
+                        { name: "chainId", type: "uint256" },
+                        { name: "verifyingContract", type: "address" }
+                    ],
+                    MetaTransaction: [
+                        { name: "nonce", type: "uint256" },
+                        { name: "from", type: "address" }
+                    ]
+                },
+                message: {
+                    nonce: parseInt(userNonce),
+                    from: alice.address
+                },
+            };
+
+            const signature = await hre.network.provider.request({
+                method: "eth_signTypedData_v4",
+                params: [alice.address, typedMessage],
+            });
+            const sig = signature.substring(2);
+            const r = "0x" + sig.substring(0, 64);
+            const s = "0x" + sig.substring(64, 128);
+            const v = parseInt(sig.substring(128, 130), 16).toString();
+
+            await expect(GCBank.connect(alice).withdrawPoints(
+                transferAmount,
+                alice.address,
+                r, s, v
+            )).to.be.revertedWith("GCBank:invalid-signature");
+
+            expect(await UChildERC20.balanceOf(alice.address)).to.equal('0');
+            expect(await GCBank.nonces(owner.address)).to.equal('0');
+        });
+
+        it("Owner should fail to Distribute $GCR after Pausing", async function () {
+
+            expect(await UChildERC20.balanceOf(alice.address)).to.equal('0');
+            const userNonce = await GCBank.nonces(owner.address);
+            expect(userNonce).to.equal('0');
+
+            await GCBank.pauseContract();
+
+            const transferAmount = "250000";
+
+            const typedMessage = {
+                domain:{
+                    name: "GCBank",
+                    version: "1",
+                    chainId : hre.network.config.chainId,
+                    verifyingContract: GCBank.address
+                },
+                primaryType: "MetaTransaction",
+                types: {
+                    EIP712Domain: [
+                        { name: "name", type: "string" },
+                        { name: "version", type: "string" },
+                        { name: "chainId", type: "uint256" },
+                        { name: "verifyingContract", type: "address" }
+                    ],
+                    MetaTransaction: [
+                        { name: "nonce", type: "uint256" },
+                        { name: "from", type: "address" }
+                    ]
+                },
+                message: {
+                    nonce: parseInt(userNonce),
+                    from: owner.address
+                },
+            };
+
+            const signature = await hre.network.provider.request({
+                method: "eth_signTypedData_v4",
+                params: [owner.address, typedMessage],
+            });
+            const sig = signature.substring(2);
+            const r = "0x" + sig.substring(0, 64);
+            const s = "0x" + sig.substring(64, 128);
+            const v = parseInt(sig.substring(128, 130), 16).toString();
+
+            await expect(GCBank.connect(alice).withdrawPoints(
+                transferAmount,
+                alice.address,
+                r, s, v
+            )).to.be.revertedWith("Pausable: paused");
+
+            expect(await UChildERC20.balanceOf(alice.address)).to.equal('0');
+            expect(await GCBank.nonces(owner.address)).to.equal('0');
+        });
+
+        it("Owner should withdraw $GCR", async function () {
+
+            expect(await UChildERC20.balanceOf(GCBank.address)).to.equal('10000000');
+
+            await GCBank.withdrawFunds('10000000');
+
+            expect(await UChildERC20.balanceOf(owner.address)).to.equal('10000000');
+            expect(await UChildERC20.balanceOf(GCBank.address)).to.equal('0');
+        });
+
     });
 
 });
