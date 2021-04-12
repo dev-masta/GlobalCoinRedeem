@@ -6,34 +6,28 @@
     <title> GlobalCoin Demo </title>
     <link rel="stylesheet" type="text/css" href="style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-
-    <script src="./abi-decoder.js"></script>
-
   </head>
- 
+
   <body>
- 
+
     <h1>GlobalCoin</h1>
 
     <div class="main">
       <h2> Redeem Points </h2>
-      
+
       <label for="amount"> GlobalCoin Points to redeem: </label>
-          
-      <input id="points" type="text">
-      
-      <button id="redeem"> Redeem Points </button>
+
+      <input id="points" type="text" value="25">
+
+      <button onclick="signAndSend()"> Redeem Points </button>
 
     </div>
-    
-    Status: <span id="status">Loading...</span>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    Your GCR Balance: <span id="bal">Loading...</span>
 
-    <script src="https://unpkg.com/@metamask/detect-provider/dist/detect-provider.min.js"></script>
-
-    <script  type="module" src="./script.js"></script>
+    <script src="ethers@5.0.28.min.js"></script>
+    <script src="globals.js"></script>
+    <script src="main.js"></script>
 
   </body>
 

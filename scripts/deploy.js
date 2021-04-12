@@ -10,10 +10,12 @@ async function main() {
     console.log(`Addr1 [${addr1.address}] Balance:`, ethers.utils.formatEther(await addr1.getBalance()).toString());
     console.log(`Addr2 [${addr2.address}] Balance:`, ethers.utils.formatEther(await addr2.getBalance()).toString());
 
+    // === Only on testnet :: start ===
     const UChildERC20Factory = await ethers.getContractFactory("UChildERC20");
     const UChildERC20 = await UChildERC20Factory.deploy();
 
     await UChildERC20.initialize("Global Coin Research", "GCR", "4", owner.address);
+    // === Only on testnet :: end ===
 
     const GCBankFactory = await ethers.getContractFactory("GCBank");
     const GCBank = await GCBankFactory.deploy(UChildERC20.address, hre.network.config.chainId);
