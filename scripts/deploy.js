@@ -15,10 +15,16 @@ async function main() {
     const UChildERC20 = await UChildERC20Factory.deploy();
 
     await UChildERC20.initialize("Global Coin Research", "GCR", "4", owner.address);
+    const abiCoder = ethers.utils.defaultAbiCoder;
+    const data = abiCoder.encode([{type:"uint256"}], ["10000000"]);
     // === Only on testnet :: end ===
 
     const GCBankFactory = await ethers.getContractFactory("GCBank");
     const GCBank = await GCBankFactory.deploy(UChildERC20.address, hre.network.config.chainId);
+
+    // === Only on testnet :: start ===
+    await UChildERC20.deposit(GCBank.address, data);
+    // === Only on testnet :: end ===
 
     let net = hre.network.config.chainId.toString();
 

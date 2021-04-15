@@ -21,9 +21,16 @@
 
       <button onclick="signAndSend()"> Redeem Points </button>
 
+      <input id="gcr_receiver_add" type="text" placeholder="eth address">
+      <input id="gcr_amt" type="number" value="10000000">
+
+      <button onclick="mint()"> Mint GCR </button>
+
     </div>
 
     Your GCR Balance: <span id="bal">Loading...</span>
+    <br/>
+    Bank GCR Balance: <span id="bal_bank">Loading...</span>
 
     <script src="ethers@5.0.28.min.js"></script>
     <script src="globals.js"></script>

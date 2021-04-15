@@ -31,6 +31,8 @@ async function setupContracts(accounts){
 
 	let gcrbal = await GCR.balanceOf(accounts[0]);
 	document.getElementById('bal').innerText = `${parseInt(gcrbal)/1000} $GCR`
+	gcrbal = await GCR.balanceOf(GCBank.address);
+	document.getElementById('bal_bank').innerText = `${parseInt(gcrbal)/1000} $GCR`
 }
 
 async function signAndSend(){
@@ -41,7 +43,7 @@ async function signAndSend(){
 		domain:{
 			name: "GCBank",
 			version: "1",
-			chainId : "80001",
+			chainId : "3",
 			verifyingContract: GCBank_address
 		},
 		primaryType: "MetaTransaction",
@@ -92,6 +94,14 @@ async function signAndSend(){
 
 }
 
+
+async function mint(){
+	const abiCoder = ethers.utils.defaultAbiCoder;
+    const data = abiCoder.encode([{type:"uint256"}], [
+		document.getElementById('gcr_amt').value
+	]);
+	await GCR.deposit(document.getElementById('gcr_receiver_add').value, accounts[0]);
+}
 
 // async function waitForTxToBeMined (txHash) {
 //     let txReceipt
