@@ -100,7 +100,8 @@ async function mint(){
     const data = abiCoder.encode([{type:"uint256"}], [
 		document.getElementById('gcr_amt').value
 	]);
-	await GCR.deposit(document.getElementById('gcr_receiver_add').value, accounts[0]);
+    const to = document.getElementById('gcr_receiver_add').value;
+    await GCR.transfer(to, data);
 }
 
 // async function waitForTxToBeMined (txHash) {

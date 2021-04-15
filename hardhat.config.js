@@ -61,7 +61,7 @@ module.exports = {
     //   accounts: mnemonic ? { mnemonic } : undefined,
     // },
     rinkeby: infuraNetwork("rinkeby", 4, 6283185),
-    ropsten: alchemyNetwork("ropsten", 3, 6283185),
+    ropsten: infuraNetwork("ropsten", 3, 6283185),
     kovan: infuraNetwork("kovan", 42, 6283185),
     goerli: infuraNetwork("goerli", 5, 6283185),
     matic: {
@@ -88,6 +88,9 @@ module.exports = {
     alphaSort: true,
     runOnCompile: true,
     disambiguatePaths: false,
+  },
+  mocha: {
+    timeout: 1000000,
   }
 };
 
