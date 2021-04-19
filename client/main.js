@@ -8,7 +8,7 @@ window.addEventListener('load', async () => {
         ethereum.autoRefreshOnNetworkChange = false;
 
         window.accounts = [];
-        const biconomy = new Biconomy(ethereum,{apiKey: "0kdnGeBMQ.e0fd681c-797c-481c-b1c5-5756e0c22e1f"});
+        const biconomy = new Biconomy(window.ethereum,{apiKey: "aKBJCRz5_.e87303f2-d762-4e5e-9877-0003f38cea08"});
         window.web3 = new ethers.providers.Web3Provider(biconomy);
         //window.web3 = new ethers.providers.Web3Provider(ethereum);
 
