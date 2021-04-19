@@ -8,8 +8,9 @@ window.addEventListener('load', async () => {
         ethereum.autoRefreshOnNetworkChange = false;
 
         window.accounts = [];
-        // const biconomy = new Biconomy(ethereum,{apiKey: ""});
-        window.web3 = new ethers.providers.Web3Provider(ethereum);
+        const biconomy = new Biconomy(ethereum,{apiKey: "0kdnGeBMQ.e0fd681c-797c-481c-b1c5-5756e0c22e1f"});
+        window.web3 = new ethers.providers.Web3Provider(biconomy);
+        //window.web3 = new ethers.providers.Web3Provider(ethereum);
 
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         setupContracts(accounts)
@@ -96,10 +97,10 @@ async function signAndSend(){
 
 
 async function mint(){
-	const abiCoder = ethers.utils.defaultAbiCoder;
+    const abiCoder = ethers.utils.defaultAbiCoder;
     const data = abiCoder.encode([{type:"uint256"}], [
-		document.getElementById('gcr_amt').value
-	]);
+        document.getElementById('gcr_amt').value
+    ]);
     const to = document.getElementById('gcr_receiver_add').value;
     await GCR.transfer(to, data);
 }
