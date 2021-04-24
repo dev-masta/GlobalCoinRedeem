@@ -51,18 +51,18 @@ contract GCBank is Ownable, Pausable, GCBankMeta {
         // addPauser(msg.sender);
     }
 
-    function pauseContract() public onlyOwner {
+    function pauseContract() onlyOwner external {
         _pause();
     }
 
-    function withdrawFunds(uint256 _amount) public onlyOwner {
+    function withdrawFunds(uint256 _amount) onlyOwner external {
         IERC20 GCR = IERC20(GcrAddress);
         GCR.transfer(owner(), _amount);
     }
 
     function withdrawPoints (
         uint256 _amount, address _receiverAddress, bytes32 r, bytes32 s, uint8 v
-    ) public  whenNotPaused {
+    ) whenNotPaused external {
 
         IERC20 GCR = IERC20(GcrAddress);
         address contractOwner = owner();
