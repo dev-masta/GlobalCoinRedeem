@@ -82,6 +82,8 @@ async function signAndSend(){
             const s = "0x" + signature.substring(64, 128);
             const v = parseInt(signature.substring(128, 130), 16);
 
+			console.log(userNonce, r, s, v);
+
 			let data = await GCBank.withdrawPoints(
 				transferAmount.toString(),
 				accounts[0],

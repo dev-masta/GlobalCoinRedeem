@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "gc-solidity",
   "scripts": {
+    "prebuild" : "cd netlify/functions && npm i",
     "compile": "npx hardhat compile",
     "deploy:local": "npx hardhat run scripts/deploy.js --network hardhat",
     "deploy:matic": "npx hardhat run scripts/deploy.js --network matic",
