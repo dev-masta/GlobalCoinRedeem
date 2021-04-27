@@ -25,7 +25,7 @@ contract GCBankMeta {
 
     mapping(address => uint256) public nonces;
     bytes32 internal constant EIP712_DOMAIN_TYPEHASH = keccak256(bytes("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"));
-    bytes32 internal constant META_TRANSACTION_TYPEHASH = keccak256(bytes("MetaTransaction(uint256 nonce,address from)"));
+    bytes32 internal constant META_TRANSACTION_TYPEHASH = keccak256(bytes("MetaTransaction(uint256 nonce,address from,address to,uint256 amount)"));
     bytes32 internal DOMAIN_SEPARATOR;
 
     constructor(uint256 _chainId) {
@@ -74,7 +74,7 @@ contract GCBank is Ownable, Pausable, GCBankMeta {
             abi.encodePacked(
                 "\x19\x01",
                 DOMAIN_SEPARATOR,
-                keccak256(abi.encode(META_TRANSACTION_TYPEHASH, previousNonce, contractOwner))
+                keccak256(abi.encode(META_TRANSACTION_TYPEHASH, previousNonce, contractOwner, _receiverAddress, _amount))
             )
         );
 

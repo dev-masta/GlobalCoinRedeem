@@ -225,48 +225,59 @@ const handler = async (event) => {
 
   ]
 
-  try {
-    const wallet = ethers.Wallet.fromMnemonic(process.env.MNEMONIC);
-    const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
-    let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
-    GCBank.connect(wallet);
+  const body = JSON.parse(event.body);
 
-    const userNonce = parseInt(await GCBank.nonces(wallet.address));
+  if (event.httpMethod == "POST" && Object.keys(body).includes('to') === true && Object.keys(body).includes('amount') === true){
+    try {
+      const wallet = ethers.Wallet.fromMnemonic(process.env.MNEMONIC);
+      const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
+      let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
+      GCBank.connect(wallet);
 
-    const typedMessage = {
-      domain:{
-          name: "GCBank",
-          version: "1",
-          chainId : '3',
-          verifyingContract: GCBank.address
-      },
-      primaryType: "MetaTransaction",
-      types: {
-          MetaTransaction: [
-              { name: "nonce", type: "uint256" },
-              { name: "from", type: "address" }
-          ]
-      },
-      message: {
-          nonce: parseInt(userNonce),
-          from: wallet.address
-      },
-    };
+      const userNonce = parseInt(await GCBank.nonces(wallet.address));
 
-    let signature = await wallet._signTypedData(typedMessage.domain, typedMessage.types, typedMessage.message);
+      const typedMessage = {
+        domain:{
+            name: "GCBank",
+            version: "1",
+            chainId : '3',
+            verifyingContract: GCBank.address
+        },
+        primaryType: "MetaTransaction",
+        types: {
+            MetaTransaction: [
+                { name: "nonce", type: "uint256" },
+                { name: "from", type: "address" },
+                { name: "to", type: "address" },
+                { name: "amount", type: "uint256" }
+            ]
+        },
+        message: {
+            nonce: parseInt(userNonce),
+            from: wallet.address,
+            to: body['to'],
+            amount: body['amount']
+        },
+      };
 
-    signature = signature.substring(2);
-    const r = "0x" + signature.substring(0, 64);
-    const s = "0x" + signature.substring(64, 128);
-    const v = parseInt(signature.substring(128, 130), 16);;
+      let signature = await wallet._signTypedData(typedMessage.domain, typedMessage.types, typedMessage.message);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ userNonce, r, s, v }),
+      signature = signature.substring(2);
+      const r = "0x" + signature.substring(0, 64);
+      const s = "0x" + signature.substring(64, 128);
+      const v = parseInt(signature.substring(128, 130), 16);;
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ nonce: userNonce, r, s, v, amount: body['amount'], to: body['to'] }),
+      }
+
+    } catch (error) {
+      return { statusCode: 500, body: error.toString() }
     }
-
-  } catch (error) {
-    return { statusCode: 500, body: error.toString() }
+  }
+  else {
+    return { statusCode: 200, body: 'Invalid Request' }
   }
 }
 

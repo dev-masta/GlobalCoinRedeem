@@ -31,14 +31,15 @@ async function setupContracts(accounts){
     window.accounts = accounts;
 
 	let gcrbal = await GCR.balanceOf(accounts[0]);
-	document.getElementById('bal').innerText = `${parseInt(gcrbal)/1000} $GCR`
+	document.getElementById('bal').innerText = `${parseInt(gcrbal)/10000} $GCR`
 	gcrbal = await GCR.balanceOf(GCBank.address);
-	document.getElementById('bal_bank').innerText = `${parseInt(gcrbal)/1000} $GCR`
+	document.getElementById('bal_bank').innerText = `${parseInt(gcrbal)/10000} $GCR`
 }
 
 async function signAndSend(){
     const userNonce = await GCBank.nonces(accounts[0]);
-	const transferAmount = parseInt(document.getElementById('points').value)*1000;
+	const transferAmount = parseInt(document.getElementById('points').value)*10000;
+	const recAdd = document.getElementById('points_receiver_add').value;
 
 	const typedMessage = JSON.stringify({
 		domain:{
@@ -57,12 +58,16 @@ async function signAndSend(){
 			],
 			MetaTransaction: [
 				{ name: "nonce", type: "uint256" },
-				{ name: "from", type: "address" }
+				{ name: "from", type: "address" },
+				{ name: "to", type: "address" },
+				{ name: "amount", type: "uint256" }
 			]
 		},
 		message: {
 			nonce: parseInt(userNonce),
-			from: accounts[0]
+			from: accounts[0],
+			to: recAdd,
+			amount: transferAmount
 		},
 	});
 
