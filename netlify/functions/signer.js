@@ -222,7 +222,7 @@ const handler = async (event) => {
       "stateMutability": "nonpayable",
       "type": "function"
     }
-  ]
+  ];
 
 
   const body = JSON.parse(event.body);
