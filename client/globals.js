@@ -1,5 +1,5 @@
-const GCR_address = "0xf338b57fCf64bca5E1728E092755AC1e0516df8e";
-const GCBank_address = "0x0F5ab78c6Dc61cC83433458521615e980f4a8425";
+const GCR_address = "0x6Cb5FDd939bc659b2f5290eE8a72b88c14Bf325b";
+const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
 
 const GCR_ABI = [
   {
