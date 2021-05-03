@@ -6,7 +6,7 @@
 
 2. Setup `.env` file in the root directory according to the `.env.sample`.
 
- - `MNEMONIC` : Your wallet MNEMONIC. Make sure to fund your testnet wallet from the [faucet](https://faucet.matic.network).
+ - `PRIVATE_KEY` : Your wallet PRIVATE_KEY. Make sure to fund your account from the [faucet](https://faucet.matic.network).
  - `PROJECT_ID` : Your Infura project Id.
  - `ETHERSCAN_API_KEY` : Your Etherscan API key.
  - `CMC_APIKEY` : Your CoinMarketCap API key.
