@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "gc-solidity",
   "scripts": {
-    "prebuild" : "cd netlify/functions && npm i",
+    "prebuild": "cd netlify/functions && npm i",
     "compile": "npx hardhat compile",
     "deploy:local": "npx hardhat run scripts/deploy.js --network hardhat",
     "deploy:matic": "npx hardhat run scripts/deploy.js --network matic",
@@ -23,22 +23,21 @@
   },
   "homepage": "https://github.com/milideva/Solidity#readme",
   "dependencies": {
-    "@biconomy/mexa": "^2.0.8",
     "@nomiclabs/hardhat-ethers": "^2.0.1",
-    "@nomiclabs/hardhat-etherscan": "^2.1.1",
+    "@nomiclabs/hardhat-etherscan": "^2.1.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts": "^4.1.0",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "ethereum-waffle": "^3.2.2",
-    "ethers": "^5.0.31",
-    "hardhat": "^2.1.2",
-    "hardhat-abi-exporter": "^2.0.8",
+    "ethers": "^5.1.4",
+    "hardhat": "^2.2.1",
+    "hardhat-abi-exporter": "^2.2.1",
     "hardhat-contract-sizer": "^2.0.2",
     "hardhat-gas-reporter": "^1.0.4",
     "hardhat-local-networks-config-plugin": "0.0.5"
   },
   "devDependencies": {
-    "@openzeppelin/test-helpers": "^0.5.10"
+    "@openzeppelin/test-helpers": "^0.5.11"
   }
 }

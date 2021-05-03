@@ -57,12 +57,16 @@ describe("GCBank", accounts => {
                     ],
                     MetaTransaction: [
                         { name: "nonce", type: "uint256" },
-                        { name: "from", type: "address" }
+                        { name: "from", type: "address" },
+                        { name: "to", type: "address" },
+                        { name: "amount", type: "uint256" }
                     ]
                 },
                 message: {
                     nonce: parseInt(userNonce),
-                    from: owner.address
+                    from: owner.address,
+                    to: alice.address,
+                    amount: transferAmount
                 },
             };
 
@@ -110,12 +114,16 @@ describe("GCBank", accounts => {
                     ],
                     MetaTransaction: [
                         { name: "nonce", type: "uint256" },
-                        { name: "from", type: "address" }
+                        { name: "from", type: "address" },
+                        { name: "to", type: "address" },
+                        { name: "amount", type: "uint256" }
                     ]
                 },
                 message: {
                     nonce: parseInt(userNonce),
-                    from: alice.address
+                    from: owner.address,
+                    to: alice.address,
+                    amount: transferAmount
                 },
             };
 
@@ -165,12 +173,16 @@ describe("GCBank", accounts => {
                     ],
                     MetaTransaction: [
                         { name: "nonce", type: "uint256" },
-                        { name: "from", type: "address" }
+                        { name: "from", type: "address" },
+                        { name: "to", type: "address" },
+                        { name: "amount", type: "uint256" }
                     ]
                 },
                 message: {
                     nonce: parseInt(userNonce),
-                    from: owner.address
+                    from: owner.address,
+                    to: alice.address,
+                    amount: transferAmount
                 },
             };
 
