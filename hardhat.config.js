@@ -56,6 +56,7 @@ module.exports = {
     ropsten: infuraNetwork("ropsten", 3, 6283185),
     kovan: infuraNetwork("kovan", 42, 6283185),
     goerli: infuraNetwork("goerli", 5, 6283185),
+    mainnet: infuraNetwork("mainnet", 5, 12000000),
     matic: {
       url: "https://rpc-mumbai.matic.today/",
       chainId: 80001,
