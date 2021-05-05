@@ -243,6 +243,10 @@ contract GCBank is Ownable, Pausable, GCBankMeta {
         _pause();
     }
 
+    function unpauseContract() onlyOwner external {
+        _unpause();
+    }
+
     function withdrawFunds(uint256 _amount) onlyOwner external {
         IERC20 GCR = IERC20(GcrAddress);
         GCR.transfer(owner(), _amount);
