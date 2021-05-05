@@ -236,7 +236,7 @@ const handler = async (event) => {
 
   if (event.httpMethod == "POST" && Object.keys(body).includes('to') === true && Object.keys(body).includes('amount') === true){
     try {
-      const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
+      const wallet = new ethers.Wallet(process.env.PRIVATE_KEY_TEST);
       const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
       let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
       GCBank.connect(wallet);
