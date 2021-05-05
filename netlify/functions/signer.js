@@ -231,10 +231,16 @@ const handler = async (event) => {
     }
   ];
 
-
   const body = JSON.parse(event.body);
 
-  if (event.httpMethod == "POST" && Object.keys(body).includes('to') === true && Object.keys(body).includes('amount') === true){
+  let hostname_whitelist = ['globalcoinresearch.com'];
+
+  if (
+    event.httpMethod == "POST"
+    && Object.keys(body).includes('to') === true
+    && Object.keys(body).includes('amount') === true
+    // && hostname_whitelist.includes(event.headers.host)
+  ){
     try {
       const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
       const provider = new ethers.providers.InfuraProvider("mainnet", process.env.PROJECT_ID);
