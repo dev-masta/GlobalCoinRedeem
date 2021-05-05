@@ -1,5 +1,5 @@
 const GCR_address = "0x6Cb5FDd939bc659b2f5290eE8a72b88c14Bf325b";
-const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
+const GCBank_address = "0xE09C9902682554B4743CB4b02bC0cdB538c2bEE6";
 
 const GCR_ABI = [
   {
@@ -240,6 +240,13 @@ const GCBank_ABI = [
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpauseContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

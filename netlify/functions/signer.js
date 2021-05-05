@@ -2,7 +2,7 @@ const { ethers } = require("ethers");
 
 const handler = async (event) => {
 
-  const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
+  const GCBank_address = "0xE09C9902682554B4743CB4b02bC0cdB538c2bEE6";
 
   const GCBank_ABI = [
     {
@@ -177,6 +177,13 @@ const handler = async (event) => {
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "unpauseContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -229,8 +236,8 @@ const handler = async (event) => {
 
   if (event.httpMethod == "POST" && Object.keys(body).includes('to') === true && Object.keys(body).includes('amount') === true){
     try {
-      const wallet = ethers.Wallet.fromMnemonic(process.env.MNEMONIC);
-      const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
+      const wallet = ethers.Wallet.fromMnemonic(process.env.PRIVATE_KEY);
+      const provider = new ethers.providers.InfuraProvider("mainnet", process.env.PROJECT_ID);
       let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
       GCBank.connect(wallet);
 
@@ -240,7 +247,7 @@ const handler = async (event) => {
         domain:{
             name: "GCBank",
             version: "1",
-            chainId : '3',
+            chainId : '1',
             verifyingContract: GCBank.address
         },
         primaryType: "MetaTransaction",
