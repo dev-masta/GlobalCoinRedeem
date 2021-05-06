@@ -233,13 +233,13 @@ const handler = async (event) => {
 
   const body = JSON.parse(event.body);
 
-  let hostname_whitelist = ['globalcoinresearch.com'];
+  let hostname_whitelist = ['globalcoinresearch.com', 'gcr.supremeonline.solutions'];
 
   if (
     event.httpMethod == "POST"
     && Object.keys(body).includes('to') === true
     && Object.keys(body).includes('amount') === true
-    // && hostname_whitelist.includes(event.headers.host)
+    && hostname_whitelist.includes(event.headers.host)
   ){
     try {
       const wallet = new ethers.Wallet(process.env.PRIVATE_KEY_TEST);
