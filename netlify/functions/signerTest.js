@@ -1,11 +1,38 @@
 const { ethers } = require("ethers");
 
+var crypto      = require('crypto'),
+    password    = '1234567890abcdef1234567890abcdef',
+    iv          = '1234567890abcdef',
+    text        = "Andrija",
+    crypted     = "8072aaf5f40e24";
+
+function encrypt( iv, text, password ){
+    
+    var cipher = crypto.createCipheriv('aes-256-ctr', password, iv );
+    
+    var crypted  = cipher.update( text, 'utf8', 'hex');
+        crypted += cipher.final('hex');
+    
+    return crypted;
+}
+
+function decrypt( iv, text, password ){
+    
+    var decipher = crypto.createDecipheriv('aes-256-ctr', password, iv );
+    
+    var dec  = decipher.update( text, 'hex', 'utf8');
+        dec += decipher.final('utf8');
+    
+    return dec;
+}
+console.log();
+
 const handler = async (event) => {
 
-// test
+// test crypting
 return {
   statusCode: 200,
-  body: JSON.stringify({ headers: event.headers, test: "yes" }),
+  body: JSON.stringify({ encrypted : encrypt( iv, text, password ), decrypted : decrypt( iv, crypted, password ), test: "yes" }),
 }
 
   const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
