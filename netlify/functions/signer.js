@@ -233,7 +233,7 @@ const handler = async (event) => {
 
   const body = JSON.parse(event.body);
 
-  let hostname_whitelist = ['globalcoinresearch.com', 'gcr.supremeonline.solutions'];
+  let hostname_whitelist = ['globalcoinresearch.com'];
 
   if (
     event.httpMethod == "POST"
