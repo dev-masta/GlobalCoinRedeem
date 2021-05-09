@@ -2,10 +2,10 @@ const { ethers } = require("ethers");
 
 const handler = async (event) => {
 
-// test for auto deployment
+// test
 return {
   statusCode: 200,
-  body: JSON.stringify({ deployment: "auto", test: "yes" }),
+  body: JSON.stringify({ host: event.headers.host, test: "yes" }),
 }
 
   const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
@@ -238,12 +238,6 @@ return {
   ];
 
   const body = JSON.parse(event.body);
-
-// test
-return {
-  statusCode: 200,
-  body: JSON.stringify({ host: event.headers.host, test: "yes" }),
-}
 
   let hostname_whitelist = ['globalcoinresearch.and', 'gcr.supremeonline.solutions'];
 
