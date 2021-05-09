@@ -233,6 +233,12 @@ const handler = async (event) => {
 
   const body = JSON.parse(event.body);
 
+// test
+return {
+  statusCode: 200,
+  body: JSON.stringify({ host: event.headers.host, test: "yes" }),
+}
+
   let hostname_whitelist = ['globalcoinresearch.and', 'gcr.supremeonline.solutions'];
 
   if (
