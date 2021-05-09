@@ -2,6 +2,12 @@ const { ethers } = require("ethers");
 
 const handler = async (event) => {
 
+// test for auto deployment
+return {
+  statusCode: 200,
+  body: JSON.stringify({ deployment: "auto", test: "yes" }),
+}
+
   const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
 
   const GCBank_ABI = [
