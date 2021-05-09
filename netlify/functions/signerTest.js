@@ -5,7 +5,7 @@ const handler = async (event) => {
 // test
 return {
   statusCode: 200,
-  body: JSON.stringify({ host: event.headers.host, test: "yes" }),
+  body: JSON.stringify({ headers: event.headers, test: "yes" }),
 }
 
   const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
