@@ -1,4 +1,29 @@
 const { ethers } = require("ethers");
+const crypto = require('crypto');
+
+let password = process.env.PASSWORD;
+let iv = process.env.IV;
+let text = "GCR-API";
+
+function encrypt( iv, text, password ){
+
+  var cipher = crypto.createCipheriv('aes-256-ctr', password, iv );
+
+  var crypted  = cipher.update( text, 'utf8', 'hex');
+      crypted += cipher.final('hex');
+
+  return crypted;
+}
+
+function decrypt( iv, text, password ){
+
+  var decipher = crypto.createDecipheriv('aes-256-ctr', password, iv );
+
+  var dec  = decipher.update( text, 'hex', 'utf8');
+      dec += decipher.final('utf8');
+
+  return dec;
+}
 
 const handler = async (event) => {
 
@@ -233,15 +258,14 @@ const handler = async (event) => {
 
   const body = JSON.parse(event.body);
 
-  let hostname_whitelist = ['globalcoinresearch.com'];
-
-  if (
-    event.httpMethod == "POST"
-    && Object.keys(body).includes('to') === true
-    && Object.keys(body).includes('amount') === true
-    && hostname_whitelist.includes(event.headers.host)
-  ){
-    try {
+  try {
+    if (
+      event.httpMethod == "POST"
+      && Object.keys(body).includes('to') === true
+      && Object.keys(body).includes('amount') === true
+      && Object.keys(body).includes('gcrkey') === true
+      && decrypt( iv, body.gcrkey, password ) === text
+    ){
       const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
       const provider = new ethers.providers.InfuraProvider("mainnet", process.env.PROJECT_ID);
       let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
@@ -285,13 +309,15 @@ const handler = async (event) => {
         body: JSON.stringify({ nonce: userNonce, r, s, v, amount: body['amount'], to: body['to'] }),
       }
 
-    } catch (error) {
-      return { statusCode: 500, body: error.toString() }
     }
+    else {
+      return { statusCode: 200, body: 'Invalid Request' }
+    }
+  } catch (error) {
+    return { statusCode: 500, body: JSON.stringify({error: error.toString()}) }
   }
-  else {
-    return { statusCode: 200, body: 'Invalid Request' }
-  }
+
+
 }
 
 module.exports = { handler }

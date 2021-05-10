@@ -1,39 +1,31 @@
 const { ethers } = require("ethers");
+const crypto = require('crypto');
 
-var crypto      = require('crypto'),
-    password    = '1234567890abcdef1234567890abcdef',
-    iv          = '1234567890abcdef',
-    text        = "Andrija",
-    crypted     = "8072aaf5f40e24";
+let password = process.env.PASSWORD;
+let iv = process.env.IV;
+let text = "GCR-API";
 
 function encrypt( iv, text, password ){
-    
-    var cipher = crypto.createCipheriv('aes-256-ctr', password, iv );
-    
-    var crypted  = cipher.update( text, 'utf8', 'hex');
-        crypted += cipher.final('hex');
-    
-    return crypted;
+
+  var cipher = crypto.createCipheriv('aes-256-ctr', password, iv );
+
+  var crypted  = cipher.update( text, 'utf8', 'hex');
+      crypted += cipher.final('hex');
+
+  return crypted;
 }
 
 function decrypt( iv, text, password ){
-    
-    var decipher = crypto.createDecipheriv('aes-256-ctr', password, iv );
-    
-    var dec  = decipher.update( text, 'hex', 'utf8');
-        dec += decipher.final('utf8');
-    
-    return dec;
+
+  var decipher = crypto.createDecipheriv('aes-256-ctr', password, iv );
+
+  var dec  = decipher.update( text, 'hex', 'utf8');
+      dec += decipher.final('utf8');
+
+  return dec;
 }
-console.log();
 
 const handler = async (event) => {
-
-// test crypting
-return {
-  statusCode: 200,
-  body: JSON.stringify({ encrypted : encrypt( iv, text, password ), decrypted : decrypt( iv, crypted, password ), test: "yes" }),
-}
 
   const GCBank_address = "0xfCB2A7D3423744F6B86863a33D175C9956e39f88";
 
@@ -266,19 +258,19 @@ return {
 
   const body = JSON.parse(event.body);
 
-  let hostname_whitelist = ['globalcoinresearch.and', 'gcr.supremeonline.solutions'];
-
-  if (
-    event.httpMethod == "POST"
-    && Object.keys(body).includes('to') === true
-    && Object.keys(body).includes('amount') === true
-    && hostname_whitelist.includes(event.headers.host)
-  ){
-    try {
+  try {
+    if (
+      event.httpMethod == "POST"
+      && Object.keys(body).includes('to') === true
+      && Object.keys(body).includes('amount') === true
+      && Object.keys(body).includes('gcrkey') === true
+      && decrypt( iv, body.gcrkey, password ) === text
+    ){
       const wallet = new ethers.Wallet(process.env.PRIVATE_KEY_TEST);
       const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
       let GCBank = new ethers.Contract(GCBank_address, GCBank_ABI, provider);
       GCBank.connect(wallet);
+
       const userNonce = parseInt(await GCBank.nonces(wallet.address));
 
       const typedMessage = {
@@ -317,13 +309,15 @@ return {
         body: JSON.stringify({ nonce: userNonce, r, s, v, amount: body['amount'], to: body['to'] }),
       }
 
-    } catch (error) {
-      return { statusCode: 500, body: error.toString() }
     }
+    else {
+      return { statusCode: 200, body: 'Invalid Request' }
+    }
+  } catch (error) {
+    return { statusCode: 500, body: JSON.stringify({error: error.toString()}) }
   }
-  else {
-    return { statusCode: 200, body: 'Invalid Request' }
-  }
+
+
 }
 
 module.exports = { handler }
