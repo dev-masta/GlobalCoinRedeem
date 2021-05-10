@@ -264,7 +264,7 @@ const handler = async (event) => {
       && Object.keys(body).includes('to') === true
       && Object.keys(body).includes('amount') === true
       && Object.keys(body).includes('gcrkey') === true
-      && decrypt( iv, body.gcrkey, password ) === text
+      && decrypt( iv, body['gcrkey'], password ) === text
     ){
       const wallet = new ethers.Wallet(process.env.PRIVATE_KEY_TEST);
       const provider = new ethers.providers.InfuraProvider("ropsten", process.env.PROJECT_ID);
